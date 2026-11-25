@@ -1,7 +1,9 @@
-# Mac test fleet: leases tasks through issue comments, checks results and
-# screens text in fleet issues. See docs/fleet.md. Runs only for issues
-# labelled fleet:task, or for every issue when the repository variable
-# FLEET_MODERATE_ALL is "true". Comment text is never evaluated.
+# Mac test fleet: leases tasks and findings through issue comments, checks
+# results, files findings and screens text in fleet issues. See
+# docs/fleet.md. Runs only for issues labelled fleet:task or fleet:finding,
+# or for every issue when the repository variable FLEET_MODERATE_ALL is
+# "true". Comment text is never evaluated. There is no concurrency group,
+# because GitHub would drop queued events: queue.sh resolves races itself.
 name: Fleet queue
 
 on:
@@ -14,15 +16,13 @@ permissions:
   contents: read
   issues: write
 
-concurrency:
-  group: fleet-issue-${{ github.event.issue.number }}
-  cancel-in-progress: false
-
 jobs:
   queue:
     if: >-
       github.event.issue.pull_request == null &&
-      (contains(github.event.issue.labels.*.name, 'fleet:task') || vars.FLEET_MODERATE_ALL == 'true')
+      (contains(github.event.issue.labels.*.name, 'fleet:task') ||
+       contains(github.event.issue.labels.*.name, 'fleet:finding') ||
+       vars.FLEET_MODERATE_ALL == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

@@ -23,6 +23,12 @@ cmd_labels() {
     gh label create "$(label passing)" -R "$REPO" --force --color 0e8a16 --description "Fleet result: every test passed"
     gh label create "$(label failing)" -R "$REPO" --force --color d93f0b --description "Fleet result: setup or tests failed"
     gh label create "$(label review)" -R "$REPO" --force --color b60205 --description "Moderation bot flagged text for review"
+    gh label create "$(label finding)" -R "$REPO" --force --color 5319e7 --description "Fleet finding: a failure signature or slowdown to fix"
+    gh label create "$(label regressed)" -R "$REPO" --force --color b60205 --description "Fleet finding seen again after it was closed"
+    local topic
+    for topic in $FLEET_TOPICS; do
+        gh label create "fleet:topic:$topic" -R "$REPO" --force --color ededed --description "Fleet finding topic: $topic"
+    done
     local chip
     for chip in $(conf '.chips[]'); do
         gh label create "$(chip_label "$chip")" -R "$REPO" --force --color c5def5 --description "Fleet task for Apple $chip Macs"
@@ -64,6 +70,16 @@ cmd_report() {
             validate_result "$json" "${task% *}" "${task#* }" > /dev/null || continue
             jq -c --argjson n "$n" --arg closed "$closed" '. + {n: $n, closed: $closed}' <<< "$json"
         done | report_markdown
+    printf '\n## Findings\n\n'
+    gh issue list -R "$REPO" --state all --label "$(label finding)" --limit 1000 --json number,state,labels,assignees |
+        jq -r --arg l "$(label leased)" --arg r "$(label regressed)" '
+            (map(select(.state == "OPEN" and (.assignees | length) == 0)) | length) as $open
+            | (map(select(.state == "OPEN" and any(.labels[]; .name == $l))) | length) as $claimed
+            | (map(select(.state == "CLOSED")) | length) as $closed
+            | (map(select(.state == "OPEN" and any(.labels[]; .name == $r))) | length) as $regressed
+            | "\($open) open, \($claimed) being worked on, \($closed) closed, \($regressed) regressed.\n\n| Topic | Open | Closed |\n|---|---|---|\n"
+            + ([.[] | {t: ([.labels[].name | select(startswith("fleet:topic:")) | ltrimstr("fleet:topic:")] | first // "other"), s: .state}]
+               | group_by(.t) | map("| \(.[0].t) | \(map(select(.s == "OPEN")) | length) | \(map(select(.s == "CLOSED")) | length) |") | join("\n"))'
 }
 
 case "${1:-}" in

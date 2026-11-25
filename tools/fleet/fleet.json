@@ -1,9 +1,22 @@
 {
   "repo": "pragyaangaur/VIctory-macOS",
-  "maintainers": ["pragyaangaur"],
+  "maintainers": [
+    "pragyaangaur"
+  ],
   "lease_hours": 4,
-  "chips": ["m1", "m2", "m3", "m4", "m5"],
-  "release_reasons": ["setup_failed", "wrong_hardware", "no_time", "other"],
+  "chips": [
+    "m1",
+    "m2",
+    "m3",
+    "m4",
+    "m5"
+  ],
+  "release_reasons": [
+    "setup_failed",
+    "wrong_hardware",
+    "no_time",
+    "other"
+  ],
   "labels": {
     "task": "fleet:task",
     "open": "fleet:open",
@@ -11,6 +24,10 @@
     "done": "fleet:done",
     "passing": "fleet:passing",
     "failing": "fleet:failing",
-    "review": "fleet:review"
-  }
+    "review": "fleet:review",
+    "finding": "fleet:finding",
+    "regressed": "fleet:regressed"
+  },
+  "lease_hours_finding": 72,
+  "auto_round_hours": 24
 }

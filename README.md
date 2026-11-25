@@ -103,7 +103,7 @@ WINE="$HOME/Library/Caches/victory-macos/target/wine-cx/bin/wine" WINEDLLOVERRID
 The project needs test results from as many Macs as possible. The [Mac test fleet](docs/fleet.md) runs both test suites on your Mac and reports the counts to this repository. It uses only the project's own tests, never a game. Paste this into an AI coding agent on your Mac, such as Claude Code, Codex or Cursor:
 
 ```text
-Read https://raw.githubusercontent.com/pragyaangaur/VIctory-macOS/main/docs/fleet-join.md and follow it to help test VIctory on my Mac. Ask me before installing or posting anything.
+Read https://raw.githubusercontent.com/pragyaangaur/VIctory-macOS/main/docs/fleet-join.md and follow it to help test VIctory on my Mac. Ask me once before installing or posting anything, then keep going until I say stop.
 ```
 
 Please read [docs/fleet-legal.md](docs/fleet-legal.md) first. You can also run the fleet by hand with `tools/fleet/fleet.sh`.

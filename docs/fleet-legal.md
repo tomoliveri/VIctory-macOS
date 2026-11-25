@@ -73,7 +73,7 @@ The fleet is built so that a copyright or circumvention notice in any of
 these countries would have nothing to point at:
 
 - The fleet's files are plain-text scripts and documents written for this project. The repository's asset policy (`cargo xtask policy`, [asset-policy.md](asset-policy.md)) checks every commit.
-- Fleet results are checked against a strict schema. Free text, links and file contents cannot pass.
+- Fleet results are checked against a strict schema. Free text, links and file contents cannot pass. Failures are reported as a test name, a topic and a hash of the normalised failure text. The text stays on the worker's Mac.
 - The queue deletes links to file-sharing sites and torrents posted in fleet issues. It hides anything that looks like game material, dumps, decryption or image attachments until a maintainer has reviewed it. Maintainers can turn the same screening on for every issue in the repository by setting the repository variable `FLEET_MODERATE_ALL` to `true`.
 - No task, page or script tells anyone how to get or decrypt a game.
 - The fleet's docs do not name or show any game.
